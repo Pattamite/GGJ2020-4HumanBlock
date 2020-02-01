@@ -17,56 +17,61 @@ public class PlayerController : MonoBehaviour {
     private bool isActive = false;
 
     void Start () {
+        // Set Region References and Callbacks
         roi = gameObject.GetComponentInChildren<PlayerInteractableRegion> ();
         roi.triggerEnter += onCollisionEnter;
         roi.triggerExit += onCollisionExit;
     }
 
     void OnDisable () {
+        // Unsubscribe Callbacks, avoid MemLeak
         roi.triggerEnter -= onCollisionEnter;
         roi.triggerExit -= onCollisionExit;
     }
 
     void Update () {
-        // Position
+        // Absolute Position Update
         Vector3 velocity = new Vector3 (Input.GetAxis ("Horizontal") * Time.deltaTime * movementSpeed, 0, Input.GetAxis ("Vertical") * Time.deltaTime * movementSpeed);
         transform.Translate (velocity, Space.World);
-        // Angle
+        // Angle Faced Update
         Vector3 targetDirection = velocity.normalized;
         Vector3 newDirection = Vector3.RotateTowards (transform.forward, targetDirection, rotationSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation (newDirection);
 
+        // Toggle Mode Updated
         if (Input.GetKeyDown ("x")) {
             isActive = !isActive;
         }
-
         if (isActive) {
+            // Pickup Item
             updateSelectedItem ();
             OnPickUpItem ();
         } else {
+            // Drop Item
             OnDropItem ();
         }
-
-        // if (Input.GetKeyUp ("x")) {
-        //     OnDropItem ();
-        // }
     }
 
     void OnPickUpItem () {
+        // Setup selectedItem before pickup
         if (selectedItem != null) {
             OnSetPickUpItemPropertyEnter ();
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
+            // Aligned selectedItem face
+            
             selectedItem.transform.SetParent (transform);
         }
     }
 
     void OnDropItem () {
+        // Restore selectedItem after pickup
         if (selectedItem != null) {
             OnSetPickUpItemPropertyExit ();
         }
     }
 
     void OnSetPickUpItemPropertyEnter () {
+        // Misc, avoid code duplication
         selectedItem.GetComponent<Rigidbody> ().useGravity = false;
         selectedItem.GetComponent<Collider> ().enabled = false;
         try {
@@ -78,6 +83,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void OnSetPickUpItemPropertyExit () {
+        // Misc, avoid code duplication
         selectedItem.GetComponent<Rigidbody> ().useGravity = true;
         selectedItem.GetComponent<Collider> ().enabled = true;
         selectedItem.transform.SetParent (previousParent);
@@ -85,6 +91,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     bool isOccluded (GameObject g, Vector3 directCast) {
+        // Check if gameObject is occluded by somthing or not
+
         // Debug.DrawLine (transform.position, transform.position + transform.forward * 100f, Color.green);
         // Ray ray = new Ray (transform.position, transform.forward);
         // RaycastHit hitInfo;
@@ -108,6 +116,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void updateSelectedItem () {
+        // Set nearest non-occluded game object within roi region
         GameObject nearest = null;
         float minDist = 0;
         foreach (GameObject g in collidedItems) {
