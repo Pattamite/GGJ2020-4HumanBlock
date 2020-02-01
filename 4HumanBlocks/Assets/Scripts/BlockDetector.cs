@@ -5,17 +5,20 @@ using UnityEngine;
 public class BlockDetector : MonoBehaviour
 {
 
+    public delegate void RepairSuccessAction();
+    public static event RepairSuccessAction OnRepairsuccess;
+
     [ SerializeField ] float errorThreshold = 10;
 
-    private Collider detectorCollider;
-
-    private List< Block > blockInDetector;
+    private Collider        detectorCollider;
+    private string          expectedBlockName;
+    private List< Block >   blockInDetector;
 
     // Start is called before the first frame update
     void Start()
     {
 
-        blockInDetector = new List< Block>();
+        blockInDetector = new List< Block >();
         
         detectorCollider = GetComponent< Collider >();
 
@@ -27,6 +30,11 @@ public class BlockDetector : MonoBehaviour
         
     }
 
+    public void SetExpectedBlockName( string blockName )
+    {
+        expectedBlockName = blockName;
+    }
+
     void OnTriggerEnter( Collider other )
     {
         Block otherBlock = other.gameObject.GetComponent< Block >();
@@ -34,20 +42,13 @@ public class BlockDetector : MonoBehaviour
         if (otherBlock != null )
             blockInDetector.Add( otherBlock );
 
-        Debug.Log( "blockInDector size " + blockInDetector.Count );
-        Debug.Log( otherBlock );
-
-        foreach ( Block block in blockInDetector )
-        {
-
-            Debug.Log( "    Block " + block + " is " + block.isCorrectOrientation( errorThreshold ) );
-
-        }
-
         if ( blockInDetector.Count >= 4 )
-
-            if ( checkCombineBlock( "B01" ))
-                Debug.Log( "SUCCESS!!!");
+        {
+            if ( checkCombineBlock( expectedBlockName ) )
+            {
+                OnRepairsuccess();
+            }
+        }
     }
 
     void OnTriggerExit( Collider other )
@@ -64,11 +65,12 @@ public class BlockDetector : MonoBehaviour
 
         foreach( Block block in blockInDetector )
         {
-            if ( block.getCredential() != requiredBlockId )
+            if ( block.getBlockName() != requiredBlockId )
                 return false;
         }
         
         return true;
 
     }
+
 }

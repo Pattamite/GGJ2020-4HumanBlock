@@ -11,8 +11,9 @@ public class Block : MonoBehaviour
 
     float rotateInput;
 
-
     Vector3 blockRotation;
+
+    private string blockName;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +36,7 @@ public class Block : MonoBehaviour
 
 
 
-        Debug.Log( "transform y - " + transform.rotation.eulerAngles.y );
+        // Debug.Log( "transform y - " + transform.rotation.eulerAngles.y );
 
         float currentTransformY =  transform.rotation.eulerAngles.y;
 
@@ -45,11 +46,11 @@ public class Block : MonoBehaviour
         return isOriented;
     }
 
-    public string getCredential()
+    public string getBlockName()
     {
 
         //mock
-        return "B01";
+        return blockName;
     }
 
 }
