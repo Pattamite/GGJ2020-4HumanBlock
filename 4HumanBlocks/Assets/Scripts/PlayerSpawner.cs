@@ -12,13 +12,14 @@ public class PlayerSpawner : MonoBehaviour
 
     public Transform notActiveSpawnPoint;
 
-    // WIP: Add player ref array here
+    private List<PlayerController> playerControllerList;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerSpawner.instance = this;
         playerCount = 0;
+        playerControllerList = new List<PlayerController>();
     }
 
     // Update is called once per frame
@@ -27,11 +28,11 @@ public class PlayerSpawner : MonoBehaviour
         
     }
 
-    public static void ReportPlayerSpawn(GameObject player)
+    public static void ReportPlayerSpawn(GameObject player, PlayerController playerController)
     {
         if(instance)
         {
-            instance.ReportPlayerSpawn_internal(player);
+            instance.ReportPlayerSpawn_internal(player, playerController);
         }
     }
 
@@ -43,14 +44,14 @@ public class PlayerSpawner : MonoBehaviour
         }
     }
 
-    private void ReportPlayerSpawn_internal(GameObject player)
+    private void ReportPlayerSpawn_internal(GameObject player, PlayerController playerController)
     {
         if(this.gameManager.currentGameState == GameState.WaitingForPlayer)
         {
             player.transform.position = spawnPoint[playerCount].transform.position;
+            playerController.id = playerCount;
+            playerControllerList.Add(playerController);
             playerCount++;
-
-            //  WIP: add player ref to array
         }
         else
         {
@@ -60,7 +61,14 @@ public class PlayerSpawner : MonoBehaviour
 
     private void StartGame_internal()
     {
-        //  WIP: Set Player to allow action
+        if (this.gameManager.currentGameState != GameState.WaitingForPlayer)
+            return;
+
+        foreach (PlayerController playerController in playerControllerList)
+        {
+            print(playerController);
+            playerController.isAllowAction = true;
+        }
         this.gameManager.playerCount = this.playerCount;
         this.gameManager.StartGame();
     }

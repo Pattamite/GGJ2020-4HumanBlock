@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour {
     private bool isActive = false;
 
     private Animator animator;
+    public int id = -1;
+    public bool isAllowAction = false;
 
     void Start () {
         // Set Region References and Callbacks

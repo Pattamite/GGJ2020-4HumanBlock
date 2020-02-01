@@ -13,7 +13,7 @@ public class Block : InteractableItem
 
     Vector3 blockRotation;
 
-    private string blockName;
+    public string blockName;
 
     // Start is called before the first frame update
     void Start()

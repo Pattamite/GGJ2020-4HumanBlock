@@ -11,6 +11,7 @@ public enum GameState
 }
 public class GameManager : MonoBehaviour
 {
+    public BlockDetector blockDetector;
 
     public GameObject[] zone0BlockArray;
     public GameObject[] zone1BlockArray;
@@ -42,35 +43,49 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        BlockDetector.OnRepairsuccess += this.BlockSetComplete;
         this.blockDictionary = new Dictionary<string, GameObject>[4];
+        this.blockDictionary[0] = new Dictionary<string, GameObject>();
+        this.blockDictionary[1] = new Dictionary<string, GameObject>();
+        this.blockDictionary[2] = new Dictionary<string, GameObject>();
+        this.blockDictionary[3] = new Dictionary<string, GameObject>();
+
+        this.blockSetNameArray = new string[zone0BlockArray.Length];
+        this.remainingBlockSetNameArray = new string[zone0BlockArray.Length];
 
         this.PopolateBlockSetNameArray(this.blockSetNameArray, this.zone0BlockArray);
         this.PopolateBlockSetNameArray(this.remainingBlockSetNameArray, this.zone0BlockArray);
-
-        this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, blockSpawnPointArray[0], this.blockDictionary[0]);
-        this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, blockSpawnPointArray[1], this.blockDictionary[1]);
-        this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, blockSpawnPointArray[2], this.blockDictionary[2]);
-        this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, blockSpawnPointArray[3], this.blockDictionary[3]);
+        print(remainingBlockSetNameArray[0]);
 
         this.allBlockSetCount = this.blockDictionary[0].Count;
         this.currentCompleteSet = 0;
 
         this.currentGameState = GameState.WaitingForPlayer;
+
+        this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, this.blockSpawnPointArray[0], this.blockDictionary[0]);
+        this.SpawnBlockAtSpawnPoint(this.zone1BlockArray, this.blockSpawnPointArray[1], this.blockDictionary[1]);
+        this.SpawnBlockAtSpawnPoint(this.zone2BlockArray, this.blockSpawnPointArray[2], this.blockDictionary[2]);
+        this.SpawnBlockAtSpawnPoint(this.zone3BlockArray, this.blockSpawnPointArray[3], this.blockDictionary[3]);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        BlockDetector.OnRepairsuccess -= this.BlockSetComplete;
+    }
+
+    private void OnDestroy()
+    {
+        BlockDetector.OnRepairsuccess += BlockSetComplete;
     }
 
     private void PopolateBlockSetNameArray(string[] blockSetNameArray, GameObject[] blockArray)
     {
-        blockSetNameArray = new string[blockArray.Length];
-
         for (int i = 0; i < blockArray.Length; i++)
         {
-            blockSetNameArray[i] = "test";
+            Block newBlock = blockArray[i].GetComponent<Block>();
+
+            blockSetNameArray[i] = newBlock.getBlockName();
         }
     }
 
@@ -91,7 +106,6 @@ public class GameManager : MonoBehaviour
 
     public void BlockSetComplete()
     {
-        
         int originalIndex = -1;
 
         for(int i = 0; i < this.remainingBlockSetNameArray.Length; i++)
@@ -137,7 +151,7 @@ public class GameManager : MonoBehaviour
             this.SetBlockToSubmitPosition(this.currentBlockSetName, i);
         }
 
-        //  WIP: notify block detector
+        this.blockDetector.SetExpectedBlockName(this.currentBlockSetName);
     }
 
     private string RandomCurrentBlockSetName()
@@ -151,15 +165,19 @@ public class GameManager : MonoBehaviour
     {
         foreach(GameObject block in blockArray)
         {
+            if (!block)
+                continue;
+
             float randomSpawnPointRadius = UnityEngine.Random.Range(0, this.blockSpawnRadius);
             float randomSpawnAngle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
             Vector3 spawnPointOffset = new Vector3(Mathf.Sin(randomSpawnAngle), 0, Mathf.Cos(randomSpawnAngle)) *
                                             randomSpawnPointRadius;
             Vector3 spawnPoint = spawnPointTransform.position + spawnPointOffset;
 
-            GameObject newBlock = Instantiate(block, spawnPoint, Quaternion.identity) as GameObject;
+            GameObject newBlockObject = Instantiate(block, spawnPoint, Quaternion.identity) as GameObject;
+            Block newBlock = newBlockObject.GetComponent<Block>();
 
-            blockDictionary.Add("test", newBlock);
+            blockDictionary.Add(newBlock.getBlockName(), newBlockObject);
         }
     }
     private void SetBlockToSubmitPosition( string blockName, int playerIndex )
