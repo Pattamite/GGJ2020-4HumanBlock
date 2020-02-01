@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     public GameObject body;
     public int id = -1;
     public bool isAllowAction = false;
+    public SfxPlayer sfxPlayer;
 
     private PlayerInteractableRegion roi;
     private GameObject selectedItem = null;
@@ -199,10 +200,12 @@ public class PlayerController : MonoBehaviour {
             // Pickup Item
             updateSelectedItem();
             OnPickUpItem();
+            this.sfxPlayer.PlaySfxClip(SfxItem.Player_PickUp);
         }
         else
         {
             OnDropItem();
+            this.sfxPlayer.PlaySfxClip(SfxItem.Player_Drop);
         }
     }
 
