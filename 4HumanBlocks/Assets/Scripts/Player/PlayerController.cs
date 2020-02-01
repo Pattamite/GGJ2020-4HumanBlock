@@ -16,10 +16,14 @@ public class PlayerController : MonoBehaviour {
     private HashSet<GameObject> collidedItems = new HashSet<GameObject> ();
     private bool isActive = false;
 
+    private Animator animator;
+
     void Start () {
         roi = gameObject.GetComponentInChildren<PlayerInteractableRegion> ();
         roi.triggerEnter += onCollisionEnter;
         roi.triggerExit += onCollisionExit;
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     void OnDisable () {
@@ -35,6 +39,13 @@ public class PlayerController : MonoBehaviour {
         Vector3 targetDirection = velocity.normalized;
         Vector3 newDirection = Vector3.RotateTowards (transform.forward, targetDirection, rotationSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation (newDirection);
+
+        Vector3 zeroVector = new Vector3();
+
+        if ( velocity !=  zeroVector )
+            animator.SetBool("isWalk", true );
+        else
+            animator.SetBool("isWalk", false);
 
         if (Input.GetKeyDown ("x")) {
             isActive = !isActive;
