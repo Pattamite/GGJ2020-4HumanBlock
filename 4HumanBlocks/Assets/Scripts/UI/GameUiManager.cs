@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameUiManager : MonoBehaviour
 {
-    public Text timerText;
+    public TextMeshProUGUI timerText;
     public Image blockCommandImage;
 
     public GameObject WaitingPlayerBoard;
