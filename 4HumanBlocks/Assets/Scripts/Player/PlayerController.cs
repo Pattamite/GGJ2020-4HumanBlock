@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour {
 
     private Animator animator;
     CharacterController characterController;
+    public int id = -1;
+    public bool isAllowAction = false;
 
     void Start () {
         // Set Region References and Callbacks
@@ -42,7 +44,7 @@ public class PlayerController : MonoBehaviour {
         velocity.Normalize();
 
         velocity.y -= 20.0f;
-        
+
         velocity *= Time.deltaTime * movementSpeed;
 
         // transform.Translate (velocity, Space.World);
