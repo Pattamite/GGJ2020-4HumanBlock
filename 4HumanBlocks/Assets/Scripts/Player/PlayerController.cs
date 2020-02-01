@@ -157,4 +157,10 @@ public class PlayerController : MonoBehaviour {
         collidedItems.Remove (other.gameObject);
         updateSelectedItem ();
     }
+
+    void OnDrawGizmosSelected()
+    {
+
+        Gizmos.DrawIcon( body.transform.position + 2 * body.transform.forward + handPositionOffset, "Light Gizmo.tiff", true);
+    }
 }
