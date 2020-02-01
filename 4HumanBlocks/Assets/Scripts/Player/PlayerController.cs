@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour {
     private HashSet<GameObject> collidedItems = new HashSet<GameObject> ();
     private bool isActive = false;
 
+    public int id = -1;
+    public bool isAllowAction = false;
+
     void Start () {
         roi = gameObject.GetComponentInChildren<PlayerInteractableRegion> ();
         roi.triggerEnter += onCollisionEnter;
