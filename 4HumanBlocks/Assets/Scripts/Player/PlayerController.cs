@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
     // Start is called before the first frame update
     public float movementSpeed = 5.0f;
     public float rotationSpeed = 10.0f;
+    public float itemRotationSpeed = 90.0f;
     public Vector3 eyePositionOffset;
     public Vector3 handPositionOffset;
     public GameObject body;
+    public int id = -1;
+    public bool isAllowAction = false;
 
     private PlayerInteractableRegion roi;
     private GameObject selectedItem = null;
@@ -18,8 +22,9 @@ public class PlayerController : MonoBehaviour {
 
     private Animator animator;
     CharacterController characterController;
-    public int id = -1;
-    public bool isAllowAction = false;
+
+    private Vector2 movementInput;
+    private float rotateObjectInput;
 
     void Start () {
         // Set Region References and Callbacks
@@ -29,6 +34,8 @@ public class PlayerController : MonoBehaviour {
 
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+        PlayerSpawner.ReportPlayerSpawn(gameObject, this);
+        print(transform.position);
     }
 
     void OnDisable () {
@@ -38,8 +45,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update () {
+        print("Update Before:" + transform.position);
         // Absolute Position Update
-        Vector3 velocity = new Vector3 (Input.GetAxis ("Horizontal") * Time.deltaTime * movementSpeed, 0, Input.GetAxis ("Vertical") * Time.deltaTime * movementSpeed);
+        Vector3 velocity = new Vector3 (movementInput.x, 0, movementInput.y);
 
         velocity.Normalize();
 
@@ -49,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 
         // transform.Translate (velocity, Space.World);
         characterController.Move( velocity );
-
+        print("Update After:" + transform.position);
         velocity.y = 0.0f;
         // Angle Faced Update
         Vector3 targetDirection = velocity.normalized;
@@ -61,21 +69,10 @@ public class PlayerController : MonoBehaviour {
         else
             animator.SetBool("isWalk", false);
 
-        // Toggle Mode Updated
-        if (Input.GetKeyDown ("x")) {
-            isActive = !isActive;
-
-            if (isActive) {
-                // Pickup Item
-                updateSelectedItem ();
-                OnPickUpItem ();
-            } else {
-                OnDropItem ();
-            }
+        if ( selectedItem != null && isActive )
+        {
+            selectedItem.transform.Rotate(0, rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
         }
-
-        // if ( selectedItem != null && isActive ):
-
 
     }
 
@@ -185,5 +182,55 @@ public class PlayerController : MonoBehaviour {
     {
 
         Gizmos.DrawSphere( body.transform.position + 2 * body.transform.forward + handPositionOffset, 0.1f);
+    }
+
+    void OnMovement(InputValue inputValue)
+    {
+        if (!isAllowAction)
+            return;
+
+        this.movementInput = inputValue.Get<Vector2>();
+    }
+
+    void OnPickupDropItem()
+    {
+        if (!isAllowAction)
+            return;
+
+        Debug.Log(this.id + " pickup / drop item.");
+
+        isActive = !isActive;
+
+        if (isActive)
+        {
+            // Pickup Item
+            updateSelectedItem();
+            OnPickUpItem();
+        }
+        else
+        {
+            OnDropItem();
+        }
+    }
+
+    void OnRotateItem(InputValue inputValue)
+    {
+        if (!isAllowAction)
+            return;
+
+        this.rotateObjectInput = inputValue.Get<float>();
+    }
+
+    void OnStartGame()
+    {
+        Debug.Log(this.id + " start game.");
+        PlayerSpawner.StartGame();
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        this.characterController.enabled = false;
+        transform.position = position;
+        this.characterController.enabled = true;
     }
 }

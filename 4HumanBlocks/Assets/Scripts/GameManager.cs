@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
 
     public int playerCount;
 
+    public GameUiManager uiManager;
+
     public string currentBlockSetName { get; private set; }
     public GameState currentGameState { get; private set; }
 
@@ -57,26 +59,29 @@ public class GameManager : MonoBehaviour
         this.PopolateBlockSetNameArray(this.remainingBlockSetNameArray, this.zone0BlockArray);
         print(remainingBlockSetNameArray[0]);
 
-        this.allBlockSetCount = this.blockDictionary[0].Count;
-        this.currentCompleteSet = 0;
+        
 
         this.currentGameState = GameState.WaitingForPlayer;
+        this.uiManager.UpdateGameStatusBoard(this.currentGameState);
 
         this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, this.blockSpawnPointArray[0], this.blockDictionary[0]);
         this.SpawnBlockAtSpawnPoint(this.zone1BlockArray, this.blockSpawnPointArray[1], this.blockDictionary[1]);
         this.SpawnBlockAtSpawnPoint(this.zone2BlockArray, this.blockSpawnPointArray[2], this.blockDictionary[2]);
         this.SpawnBlockAtSpawnPoint(this.zone3BlockArray, this.blockSpawnPointArray[3], this.blockDictionary[3]);
+
+        this.allBlockSetCount = this.blockDictionary[0].Count;
+        this.currentCompleteSet = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        BlockDetector.OnRepairsuccess -= this.BlockSetComplete;
+        this.uiManager.UpdateTimterText( this.GetGameTime() );
     }
 
     private void OnDestroy()
     {
-        BlockDetector.OnRepairsuccess += BlockSetComplete;
+        BlockDetector.OnRepairsuccess -= this.BlockSetComplete;
     }
 
     private void PopolateBlockSetNameArray(string[] blockSetNameArray, GameObject[] blockArray)
@@ -93,6 +98,7 @@ public class GameManager : MonoBehaviour
     {
         this.GenerateNewBlockSetCommand();
         this.currentGameState = GameState.GameStart;
+        this.uiManager.UpdateGameStatusBoard(this.currentGameState);
         this.startTime = Time.time;
         Debug.Log("Game Start!");
     }
@@ -100,6 +106,7 @@ public class GameManager : MonoBehaviour
     public void StopGame()
     {
         this.currentGameState = GameState.GameFinish;
+        this.uiManager.UpdateGameStatusBoard(this.currentGameState);
         this.endTime = Time.time;
         Debug.Log("Game Finish! Total Time: " + (this.startTime - this.endTime));
     }
@@ -152,6 +159,8 @@ public class GameManager : MonoBehaviour
         }
 
         this.blockDetector.SetExpectedBlockName(this.currentBlockSetName);
+
+        //this.uiManager.UpdateBlockCommandImage(sprite);
     }
 
     private string RandomCurrentBlockSetName()
