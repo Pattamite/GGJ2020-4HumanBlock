@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   rotationSpeed: 10
+  itemRotationSpeed: 90
   eyePositionOffset: {x: 0, y: 0, z: 0}
   handPositionOffset: {x: 0, y: 2.16, z: 0}
   body: {fileID: 7607789809535566208}
@@ -157,8 +158,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.8186102, y: 3.950233, z: 3.7908764}
-  m_Center: {x: -0.015414715, y: 1.4751165, z: 1.3954382}
+  m_Size: {x: 3.8186102, y: 3.950233, z: 2.4245834}
+  m_Center: {x: -0.015414715, y: 1.4751165, z: 0.7122917}
 --- !u!1001 &1924622056913836169
 PrefabInstance:
   m_ObjectHideFlags: 0
