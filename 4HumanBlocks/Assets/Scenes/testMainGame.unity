@@ -1158,7 +1158,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 8036237182244330234, guid: 332b7d26c0ae6b14e99c2a2d26df4561,
+  m_PlayerPrefab: {fileID: 1924622055694363394, guid: c8edce6a66cd11b4fb7a0ff32daf8985,
     type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
@@ -1219,6 +1219,7 @@ MonoBehaviour:
   - {fileID: 36825683}
   blockSpawnRadius: 2
   playerCount: 0
+  uiManager: {fileID: 1102581745}
 --- !u!4 &995699414
 Transform:
   m_ObjectHideFlags: 0

@@ -24,17 +24,17 @@ public class GameUiManager : MonoBehaviour
         
     }
 
-    void UpdateTimterText(float time)
+    public void UpdateTimterText(float time)
     {
         timerText.text = time.ToString("F2");
     }
 
-    void UpdateBlockCommandImage(Sprite sprite)
+    public void UpdateBlockCommandImage(Sprite sprite)
     {
         blockCommandImage.sprite = sprite;
     }
 
-    void UpdateGameStatusBoard(GameState gameState)
+    public void UpdateGameStatusBoard(GameState gameState)
     {
         switch(gameState)
         {

@@ -46,7 +46,10 @@ public class BlockDetector : MonoBehaviour
         {
             if ( checkCombineBlock( expectedBlockName ) )
             {
-                OnRepairsuccess();
+                if(OnRepairsuccess != null)
+                {
+                    OnRepairsuccess();
+                }
             }
         }
     }
