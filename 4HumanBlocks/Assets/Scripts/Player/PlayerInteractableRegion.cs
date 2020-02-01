@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ConeView : MonoBehaviour {
+public class PlayerInteractableRegion : MonoBehaviour {
     public event Action<Collider> triggerEnter;
     public event Action<Collider> triggerExit;
 
@@ -18,5 +16,4 @@ public class ConeView : MonoBehaviour {
             triggerExit (other);
         }
     }
-
 }
