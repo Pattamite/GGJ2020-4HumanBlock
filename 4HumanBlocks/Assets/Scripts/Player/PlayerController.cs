@@ -69,7 +69,11 @@ public class PlayerController : MonoBehaviour {
        
         if ( selectedItem != null && isActive )
         {
-            selectedItem.transform.Rotate(0, rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
+            selectedItem.transform.Rotate(0 , rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
+
+            Vector3 itemTargetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
+            Vector3 itemNewDirection = Vector3.RotateTowards (selectedItem.transform.forward, itemTargetDirection, rotationSpeed, 0.0f);
+            selectedItem.transform.rotation = Quaternion.LookRotation (itemNewDirection.normalized);
         }
 
     }
@@ -81,10 +85,10 @@ public class PlayerController : MonoBehaviour {
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
             // Aligned selectedItem face
             // (-89.98, <getY>, 0)
-            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
-            Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
+            // Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
+            // Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
 
-            selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
+            // selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
             selectedItem.transform.SetParent (transform);
 
             animator.SetTrigger( "carryTrigger" );
@@ -215,6 +219,11 @@ public class PlayerController : MonoBehaviour {
             return;
 
         this.rotateObjectInput = inputValue.Get<float>();
+
+        if ( this.rotateObjectInput != 0 )
+            animator.SetBool( "isRotatingItem", true );
+        else   
+            animator.SetBool( "isRotatingItem", false );
     }
 
     void OnStartGame()
