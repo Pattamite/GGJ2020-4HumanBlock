@@ -6,11 +6,11 @@ public enum SfxItem
 {
     Player_PickUp,
     Player_Drop,
-    Item_Enter1,
-    Item_Enter2,
-    Item_Enter3,
-    Item_EnterIncorrect,
-    Item_EnterCorrect,
+    Block_Enter1,
+    Block_Enter2,
+    Block_Enter3,
+    Block_EnterIncorrect,
+    Block_EnterCorrect,
     Game_Start,
     Game_TimeOut
 }
@@ -19,11 +19,11 @@ public class SfxPlayer : MonoBehaviour
 {
     public AudioClip playerPickupClip;
     public AudioClip playerDropClip;
-    public AudioClip itemEnter1Clip;
-    public AudioClip itemEnter2Clip;
-    public AudioClip itemEnter3Clip;
-    public AudioClip itemEnterIncorrectClip;
-    public AudioClip itemEnterCorrectClip;
+    public AudioClip blockEnter1Clip;
+    public AudioClip blockEnter2Clip;
+    public AudioClip blockEnter3Clip;
+    public AudioClip blockEnterIncorrectClip;
+    public AudioClip blockEnterCorrectClip;
     public AudioClip gameStartClip;
     public AudioClip gameTimeOutClip;
 
@@ -62,16 +62,16 @@ public class SfxPlayer : MonoBehaviour
                 return this.playerPickupClip;
             case SfxItem.Player_Drop:
                 return this.playerDropClip;
-            case SfxItem.Item_Enter1:
-                return this.itemEnter1Clip;
-            case SfxItem.Item_Enter2:
-                return this.itemEnter2Clip;
-            case SfxItem.Item_Enter3:
-                return this.itemEnter3Clip;
-            case SfxItem.Item_EnterIncorrect:
-                return this.itemEnterIncorrectClip;
-            case SfxItem.Item_EnterCorrect:
-                return this.itemEnterCorrectClip;
+            case SfxItem.Block_Enter1:
+                return this.blockEnter1Clip;
+            case SfxItem.Block_Enter2:
+                return this.blockEnter2Clip;
+            case SfxItem.Block_Enter3:
+                return this.blockEnter3Clip;
+            case SfxItem.Block_EnterIncorrect:
+                return this.blockEnterIncorrectClip;
+            case SfxItem.Block_EnterCorrect:
+                return this.blockEnterCorrectClip;
             case SfxItem.Game_Start:
                 return this.gameStartClip;
             case SfxItem.Game_TimeOut:

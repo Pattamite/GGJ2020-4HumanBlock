@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlockDetector : MonoBehaviour
 {
-
+    public SfxPlayer sfxPlayer;
     public delegate void RepairSuccessAction();
     public static event RepairSuccessAction OnRepairsuccess;
 
@@ -42,14 +42,31 @@ public class BlockDetector : MonoBehaviour
         if (otherBlock != null )
             blockInDetector.Add( otherBlock );
 
-        if ( blockInDetector.Count >= 4 )
+        if( blockInDetector.Count == 1)
+        {
+            sfxPlayer.PlaySfxClip(SfxItem.Block_Enter1);
+        }
+        else if (blockInDetector.Count == 1)
+        {
+            sfxPlayer.PlaySfxClip(SfxItem.Block_Enter2);
+        }
+        else if (blockInDetector.Count == 1)
+        {
+            sfxPlayer.PlaySfxClip(SfxItem.Block_Enter3);
+        }
+        else if ( blockInDetector.Count >= 4 )
         {
             if ( checkCombineBlock( expectedBlockName ) )
             {
-                if(OnRepairsuccess != null)
+                sfxPlayer.PlaySfxClip(SfxItem.Block_EnterCorrect);
+                if (OnRepairsuccess != null)
                 {
                     OnRepairsuccess();
                 }
+            }
+            else
+            {
+                sfxPlayer.PlaySfxClip(SfxItem.Block_EnterIncorrect);
             }
         }
     }

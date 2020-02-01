@@ -12,6 +12,8 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public BlockDetector blockDetector;
+    public MusicPlayer musicPlayer;
+    public SfxPlayer sfxPlayer;
 
     public GameObject[] zone0BlockArray;
     public GameObject[] zone1BlockArray;
@@ -59,10 +61,9 @@ public class GameManager : MonoBehaviour
         this.PopolateBlockSetNameArray(this.remainingBlockSetNameArray, this.zone0BlockArray);
         print(remainingBlockSetNameArray[0]);
 
-        
-
         this.currentGameState = GameState.WaitingForPlayer;
         this.uiManager.UpdateGameStatusBoard(this.currentGameState);
+        this.musicPlayer.PlayMusic(MusicItem.Game_Waiting);
 
         this.SpawnBlockAtSpawnPoint(this.zone0BlockArray, this.blockSpawnPointArray[0], this.blockDictionary[0]);
         this.SpawnBlockAtSpawnPoint(this.zone1BlockArray, this.blockSpawnPointArray[1], this.blockDictionary[1]);
@@ -99,6 +100,8 @@ public class GameManager : MonoBehaviour
         this.GenerateNewBlockSetCommand();
         this.currentGameState = GameState.GameStart;
         this.uiManager.UpdateGameStatusBoard(this.currentGameState);
+        this.musicPlayer.PlayMusic(MusicItem.Game_Playing);
+        this.sfxPlayer.PlaySfxClip(SfxItem.Game_Start);
         this.startTime = Time.time;
         Debug.Log("Game Start!");
     }
@@ -107,6 +110,8 @@ public class GameManager : MonoBehaviour
     {
         this.currentGameState = GameState.GameFinish;
         this.uiManager.UpdateGameStatusBoard(this.currentGameState);
+        this.musicPlayer.PlayMusic(MusicItem.Game_Result);
+        this.sfxPlayer.PlaySfxClip(SfxItem.Game_TimeOut);
         this.endTime = Time.time;
         Debug.Log("Game Finish! Total Time: " + (this.startTime - this.endTime));
     }
