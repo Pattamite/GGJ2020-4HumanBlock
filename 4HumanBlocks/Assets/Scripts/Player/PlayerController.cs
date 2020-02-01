@@ -41,14 +41,14 @@ public class PlayerController : MonoBehaviour {
         // Toggle Mode Updated
         if (Input.GetKeyDown ("x")) {
             isActive = !isActive;
-        }
-        if (isActive) {
-            // Pickup Item
-            updateSelectedItem ();
-            OnPickUpItem ();
-        } else {
-            // Drop Item
-            OnDropItem ();
+
+            if (isActive) {
+                // Pickup Item
+                updateSelectedItem ();
+                OnPickUpItem ();
+            } else {
+                OnDropItem ();
+            }
         }
     }
 
@@ -58,7 +58,11 @@ public class PlayerController : MonoBehaviour {
             OnSetPickUpItemPropertyEnter ();
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
             // Aligned selectedItem face
-            
+            // (-89.98, <getY>, 0)
+            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
+            Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed * Time.deltaTime, 0.0f);
+
+            selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
             selectedItem.transform.SetParent (transform);
         }
     }
@@ -75,7 +79,6 @@ public class PlayerController : MonoBehaviour {
         selectedItem.GetComponent<Rigidbody> ().useGravity = false;
         selectedItem.GetComponent<Collider> ().enabled = false;
         try {
-
             previousParent = selectedItem.transform.parent.transform;
         } catch {
             previousParent = null;
