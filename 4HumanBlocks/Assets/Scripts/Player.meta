@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:4HumanBlocks/Assets/Scripts/Player.meta
-guid: d20fcdcab30934ee5afeb7d66aa95314
-=======
 guid: d0cacbb2749c8af4986df3a27e523bba
->>>>>>> BlockSystem:4HumanBlocks/Assets/Scenes/Player_Test.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
