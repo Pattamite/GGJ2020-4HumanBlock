@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
     private bool isActive = false;
 
     private Animator animator;
+    CharacterController characterController;
 
     void Start () {
         // Set Region References and Callbacks
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour {
         roi.triggerEnter += onCollisionEnter;
         roi.triggerExit += onCollisionExit;
 
+        characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
     }
 
@@ -36,7 +38,17 @@ public class PlayerController : MonoBehaviour {
     void Update () {
         // Absolute Position Update
         Vector3 velocity = new Vector3 (Input.GetAxis ("Horizontal") * Time.deltaTime * movementSpeed, 0, Input.GetAxis ("Vertical") * Time.deltaTime * movementSpeed);
-        transform.Translate (velocity, Space.World);
+
+        velocity.Normalize();
+
+        velocity.y -= 20.0f;
+        
+        velocity *= Time.deltaTime * movementSpeed;
+
+        // transform.Translate (velocity, Space.World);
+        characterController.Move( velocity );
+
+        velocity.y = 0.0f;
         // Angle Faced Update
         Vector3 targetDirection = velocity.normalized;
         Vector3 newDirection = Vector3.RotateTowards (transform.forward, targetDirection, rotationSpeed * Time.deltaTime, 0.0f);
@@ -59,6 +71,10 @@ public class PlayerController : MonoBehaviour {
                 OnDropItem ();
             }
         }
+
+        // if ( selectedItem != null && isActive ):
+
+
     }
 
     void OnPickUpItem () {
@@ -69,7 +85,7 @@ public class PlayerController : MonoBehaviour {
             // Aligned selectedItem face
             // (-89.98, <getY>, 0)
             Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
-            Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed * Time.deltaTime, 0.0f);
+            Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
 
             selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
             selectedItem.transform.SetParent (transform);
@@ -87,6 +103,7 @@ public class PlayerController : MonoBehaviour {
         // Misc, avoid code duplication
         selectedItem.GetComponent<Rigidbody> ().useGravity = false;
         selectedItem.GetComponent<Collider> ().enabled = false;
+        selectedItem.GetComponent<Rigidbody> ().isKinematic = true;
         try {
             previousParent = selectedItem.transform.parent.transform;
         } catch {
@@ -98,6 +115,7 @@ public class PlayerController : MonoBehaviour {
         // Misc, avoid code duplication
         selectedItem.GetComponent<Rigidbody> ().useGravity = true;
         selectedItem.GetComponent<Collider> ().enabled = true;
+        selectedItem.GetComponent<Rigidbody> ().isKinematic = false;
         selectedItem.transform.SetParent (previousParent);
         previousParent = null;
     }
@@ -121,8 +139,10 @@ public class PlayerController : MonoBehaviour {
         // Debug.DrawLine (ray.origin, ray.origin + ray.direction * directCast.magnitude, Color.green);
         RaycastHit hitInfo;
         if (Physics.Raycast (ray, out hitInfo, directCast.magnitude, 9)) {
-            // Debug.Log (hitInfo.collider.gameObject);
-            return (hitInfo.collider.gameObject.GetComponent<StaticItem> () != null);
+            Debug.Log ( "" + hitInfo.collider.gameObject + " : " + g);
+            // return (hitInfo.collider.gameObject.GetComponent<StaticItem> () != null);
+            Debug.Log( hitInfo.collider.gameObject != g );
+            return (hitInfo.collider.gameObject != g);
         }
         return false;
     }
@@ -142,7 +162,8 @@ public class PlayerController : MonoBehaviour {
             }
         }
         if (nearest != selectedItem && selectedItem != null) {
-            OnSetPickUpItemPropertyExit ();
+            // OnSetPickUpItemPropertyExit ();
+            Debug.Log( "OOps");
         }
         selectedItem = nearest;
     }
@@ -161,6 +182,6 @@ public class PlayerController : MonoBehaviour {
     void OnDrawGizmosSelected()
     {
 
-        Gizmos.DrawIcon( body.transform.position + 2 * body.transform.forward + handPositionOffset, "Light Gizmo.tiff", true);
+        Gizmos.DrawSphere( body.transform.position + 2 * body.transform.forward + handPositionOffset, 0.1f);
     }
 }
