@@ -39,6 +39,8 @@ public class BlockDetector : MonoBehaviour
     {
         Block otherBlock = other.gameObject.GetComponent< Block >();
 
+        Debug.Log( "Count - " + blockInDetector.Count );
+
         if (otherBlock != null )
             blockInDetector.Add( otherBlock );
 
@@ -46,11 +48,11 @@ public class BlockDetector : MonoBehaviour
         {
             sfxPlayer.PlaySfxClip(SfxItem.Block_Enter1);
         }
-        else if (blockInDetector.Count == 1)
+        else if (blockInDetector.Count == 2)
         {
             sfxPlayer.PlaySfxClip(SfxItem.Block_Enter2);
         }
-        else if (blockInDetector.Count == 1)
+        else if (blockInDetector.Count == 3)
         {
             sfxPlayer.PlaySfxClip(SfxItem.Block_Enter3);
         }
