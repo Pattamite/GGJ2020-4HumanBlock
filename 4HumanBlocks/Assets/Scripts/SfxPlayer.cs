@@ -29,11 +29,15 @@ public class SfxPlayer : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private void Awake()
+    {
+        audioSource = gameObject.GetComponent<AudioSource>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = gameObject.GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -44,12 +48,13 @@ public class SfxPlayer : MonoBehaviour
 
     public void PlaySfxClip(SfxItem sfxItem)
     {
+        audioSource.Stop();
+
         AudioClip audioClip = this.getAudioClip(sfxItem);
 
         if (!audioClip)
             return;
-
-        audioSource.Stop();
+    
         audioSource.clip = audioClip;
         audioSource.Play();
     }

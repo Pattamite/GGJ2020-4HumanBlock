@@ -27,7 +27,18 @@ public class BlockDetector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (blockInDetector.Count >= 4)
+        {
+            if (checkCombineBlock(expectedBlockName))
+            {
+                sfxPlayer.PlaySfxClip(SfxItem.Block_EnterCorrect);
+                if (OnRepairsuccess != null)
+                {
+                    OnRepairsuccess();
+                    this.RepairSuccess();
+                }
+            }
+        }
     }
 
     public void SetExpectedBlockName( string blockName )
@@ -41,8 +52,10 @@ public class BlockDetector : MonoBehaviour
 
         Debug.Log( "Count - " + blockInDetector.Count );
 
-        if (otherBlock != null )
-            blockInDetector.Add( otherBlock );
+        if (otherBlock == null)
+            return;
+        
+        blockInDetector.Add( otherBlock );
 
         if( blockInDetector.Count == 1)
         {
@@ -64,6 +77,7 @@ public class BlockDetector : MonoBehaviour
                 if (OnRepairsuccess != null)
                 {
                     OnRepairsuccess();
+                    this.RepairSuccess();
                 }
             }
             else
@@ -87,12 +101,23 @@ public class BlockDetector : MonoBehaviour
 
         foreach( Block block in blockInDetector )
         {
-            if ( block.getBlockName() != requiredBlockId )
+            print(block.getBlockName());
+            if ( block.getBlockName() != requiredBlockId || (!block.isCorrectOrientation()) )
                 return false;
         }
         
         return true;
 
+    }
+
+    void RepairSuccess()
+    {
+        foreach (Block block in blockInDetector)
+        {
+            Destroy(block.gameObject);
+        }
+
+        blockInDetector.Clear();
     }
 
 }

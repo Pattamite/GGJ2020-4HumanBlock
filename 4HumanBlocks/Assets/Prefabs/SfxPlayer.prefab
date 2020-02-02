@@ -52,10 +52,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 10
   MaxDistance: 500
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -140,12 +140,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e2b18bfe204c549a32a3951b46ec71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPickupClip: {fileID: 0}
-  playerDropClip: {fileID: 0}
-  itemEnter1Clip: {fileID: 0}
-  itemEnter2Clip: {fileID: 0}
-  itemEnter3Clip: {fileID: 0}
-  itemEnterIncorrectClip: {fileID: 0}
-  itemEnterCorrectClip: {fileID: 0}
-  gameStartClip: {fileID: 0}
-  gameTimeOutClip: {fileID: 0}
+  playerPickupClip: {fileID: 8300000, guid: 7b004202a1a73e64385341a9f18c198f, type: 3}
+  playerDropClip: {fileID: 8300000, guid: 68f6f05a5b450834b82b13cfec69a642, type: 3}
+  blockEnter1Clip: {fileID: 8300000, guid: fdd23b28a569cdd4dbc165c10b629241, type: 3}
+  blockEnter2Clip: {fileID: 8300000, guid: fdd23b28a569cdd4dbc165c10b629241, type: 3}
+  blockEnter3Clip: {fileID: 8300000, guid: 31c01f4ff26b79944ad82d92836a97b7, type: 3}
+  blockEnterIncorrectClip: {fileID: 8300000, guid: 74c0d90813789c24aa58d639d9c68b84,
+    type: 3}
+  blockEnterCorrectClip: {fileID: 8300000, guid: f4bbc28ac69db7c4ea0376421d9eb76e,
+    type: 3}
+  gameStartClip: {fileID: 8300000, guid: 10fce37551c0416419895e4d58492c02, type: 3}
+  gameTimeOutClip: {fileID: 8300000, guid: 60553dc0a12a82740b0bd1114587780d, type: 3}
