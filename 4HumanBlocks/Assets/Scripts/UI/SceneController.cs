@@ -35,4 +35,9 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene(highScoreSceneNumber);
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
