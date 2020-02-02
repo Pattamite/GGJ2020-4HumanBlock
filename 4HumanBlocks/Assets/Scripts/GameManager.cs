@@ -24,6 +24,10 @@ public class GameManager : MonoBehaviour
 
     public Transform[] blockSubmitPointArray;
 
+    public Sprite[] commandSprite;
+
+    private Dictionary<string, Sprite> spriteDict;
+
     public float blockSpawnRadius;
 
     public int playerCount;
@@ -54,12 +58,15 @@ public class GameManager : MonoBehaviour
         this.blockDictionary[2] = new Dictionary<string, GameObject>();
         this.blockDictionary[3] = new Dictionary<string, GameObject>();
 
+        this.spriteDict = new Dictionary<string, Sprite>();
+
         this.blockSetNameArray = new string[zone0BlockArray.Length];
         this.remainingBlockSetNameArray = new string[zone0BlockArray.Length];
 
         this.PopolateBlockSetNameArray(this.blockSetNameArray, this.zone0BlockArray);
         this.PopolateBlockSetNameArray(this.remainingBlockSetNameArray, this.zone0BlockArray);
-        print(remainingBlockSetNameArray[0]);
+        this.PopulateSpriteDict(this.blockSetNameArray, this.commandSprite, this.spriteDict);
+        
 
         this.currentGameState = GameState.WaitingForPlayer;
         this.uiManager.UpdateGameStatusBoard(this.currentGameState);
@@ -92,6 +99,14 @@ public class GameManager : MonoBehaviour
             Block newBlock = blockArray[i].GetComponent<Block>();
 
             blockSetNameArray[i] = newBlock.getBlockName();
+        }
+    }
+
+    private void PopulateSpriteDict(string[] blockSetNameArray, Sprite[] commandSprite, Dictionary<string, Sprite> spriteDict)
+    {
+        for(int i = 0; i < blockSetNameArray.Length; i++)
+        {
+            spriteDict.Add(blockSetNameArray[i], commandSprite[i]);
         }
     }
 
@@ -164,6 +179,8 @@ public class GameManager : MonoBehaviour
         }
 
         this.blockDetector.SetExpectedBlockName(this.currentBlockSetName);
+
+        this.uiManager.UpdateBlockCommandImage(spriteDict[this.currentBlockSetName]);
 
         //this.uiManager.UpdateBlockCommandImage(sprite);
     }
