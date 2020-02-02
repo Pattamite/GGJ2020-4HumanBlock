@@ -1245,7 +1245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sfxPlayer: {fileID: 1598270281}
-  errorThreshold: 10
+  errorThreshold: 20
   maxWaitTime: 0
   maxStartEmissionDelay: 1.5
   startEmissionColor: {r: 0.4392157, g: 1, b: 0.25882354, a: 1}

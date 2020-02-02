@@ -135,7 +135,7 @@ public class BlockDetector : MonoBehaviour {
 
         foreach (Block block in blockInDetector) {
             print (block.getBlockName ());
-            if (block.getBlockName () != requiredBlockId || (!block.isCorrectOrientation ()))
+            if (block.getBlockName () != requiredBlockId || (!block.isCorrectOrientation ( errorThreshold )))
                 return false;
         }
 
