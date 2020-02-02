@@ -108,8 +108,10 @@ public class BlockDetector : MonoBehaviour {
             if (checkCombineBlock (expectedBlockName)) {
                 sfxPlayer.PlaySfxClip (SfxItem.Block_EnterCorrect);
                 if (OnRepairsuccess != null) {
-                    OnRepairsuccess ();
-                    this.RepairSuccess ();
+                    sfxPlayer.PlaySfxClip (SfxItem.Block_EnterCorrect);
+                    isCorrectedFlag = true;
+                    waitTime = maxWaitTime;
+                    startItemEmissionDelay = maxStartEmissionDelay;
                 }
             } else {
                 sfxPlayer.PlaySfxClip (SfxItem.Block_EnterIncorrect);
