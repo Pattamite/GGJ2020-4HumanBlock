@@ -82,11 +82,15 @@ public class PlayerController : MonoBehaviour {
     void OnPickUpItem () {
         // Setup selectedItem before pickup
         if (selectedItem != null) {
+            if (!selectedItem.GetComponent<Block>().isPickable)
+                return;
+
             OnSetPickUpItemPropertyEnter ();
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
             // Aligned selectedItem face
             // (-89.98, <getY>, 0)
-            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.eulerAngles.y, 0);
+            Vector3 targetDirection = new Vector3 (selectedItem.GetComponent<Block>().defaultXRotation, 
+                                                        selectedItem.transform.eulerAngles.y, 0);
             Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
 
             selectedItem.transform.eulerAngles = targetDirection;

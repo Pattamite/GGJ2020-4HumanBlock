@@ -6,7 +6,7 @@ public class Block : InteractableItem
 {
     //  Mock
     [ SerializeField ] float rotateSpeed = 2;
-
+    [SerializeField] public float defaultXRotation = -89.98f;
     [ SerializeField ] public float correctPosition = -89.98f;
 
     float rotateInput;
@@ -14,6 +14,8 @@ public class Block : InteractableItem
     Vector3 blockRotation;
 
     public string blockName;
+
+    public bool isPickable = true;
 
     // Start is called before the first frame update
     void Start()
