@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour {
     public float itemRotationSpeed = 90.0f;
     public Vector3 eyePositionOffset;
     public Vector3 handPositionOffset;
-    public GameObject body;
+    public GameObject[] bodyList;
+    private GameObject body;
     public int id = -1;
     public bool isAllowAction = false;
     public SfxPlayer sfxPlayer;
@@ -69,7 +70,11 @@ public class PlayerController : MonoBehaviour {
        
         if ( selectedItem != null && isActive )
         {
-            selectedItem.transform.Rotate(0 , rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
+            selectedItem.transform.Rotate(0 , rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0, Space.World);
+        }
+        else if(selectedItem == null && isActive)
+        {
+            OnDropItem();
         }
 
     }
@@ -81,13 +86,14 @@ public class PlayerController : MonoBehaviour {
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
             // Aligned selectedItem face
             // (-89.98, <getY>, 0)
-            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
+            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.eulerAngles.y, 0);
             Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
 
-            selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
+            selectedItem.transform.eulerAngles = targetDirection;
             selectedItem.transform.SetParent (transform);
 
             animator.SetTrigger( "carryTrigger" );
+            this.sfxPlayer.PlaySfxClip(SfxItem.Player_PickUp);
 
             isActive = true;
         }
@@ -97,9 +103,10 @@ public class PlayerController : MonoBehaviour {
         // Restore selectedItem after pickup
         if (selectedItem != null) {
             OnSetPickUpItemPropertyExit ();
-            animator.SetTrigger( "dropItemTrigger" );
-            isActive = false;
+            this.sfxPlayer.PlaySfxClip(SfxItem.Player_Drop);
         }
+        animator.SetTrigger("dropItemTrigger");
+        isActive = false;
     }
 
     void OnSetPickUpItemPropertyEnter () {
@@ -151,6 +158,12 @@ public class PlayerController : MonoBehaviour {
         GameObject nearest = null;
         float minDist = 0;
         foreach (GameObject g in collidedItems) {
+            if (!g)
+            {
+                collidedItems.Remove(g);
+                continue;
+            }
+
             Vector3 directCast = (transform.position + eyePositionOffset - g.transform.position);
             float dist = directCast.magnitude;
             if (nearest == null || minDist < dist) {
@@ -177,7 +190,7 @@ public class PlayerController : MonoBehaviour {
     void OnDrawGizmosSelected()
     {
 
-        Gizmos.DrawSphere( body.transform.position + 2 * body.transform.forward + handPositionOffset, 0.1f);
+        //Gizmos.DrawSphere( body.transform.position + 2 * body.transform.forward + handPositionOffset, 0.1f);
     }
 
     void OnMovement(InputValue inputValue)
@@ -200,12 +213,10 @@ public class PlayerController : MonoBehaviour {
             // Pickup Item
             updateSelectedItem();
             OnPickUpItem();
-            this.sfxPlayer.PlaySfxClip(SfxItem.Player_PickUp);
         }
         else
         {
             OnDropItem();
-            this.sfxPlayer.PlaySfxClip(SfxItem.Player_Drop);
         }
     }
 
@@ -233,5 +244,20 @@ public class PlayerController : MonoBehaviour {
         this.characterController.enabled = false;
         transform.position = position;
         this.characterController.enabled = true;
+    }
+
+    public void setId(int id)
+    {
+        body = bodyList[id];
+        for(int i = 0; i < bodyList.Length; i++)
+        {
+            if(i != id)
+            {
+                Destroy(bodyList[i]);
+            }
+        }
+
+        animator = body.GetComponent<Animator>();
+        this.id = id;
     }
 }

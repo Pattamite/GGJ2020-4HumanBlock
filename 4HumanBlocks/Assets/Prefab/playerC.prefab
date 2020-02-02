@@ -52,7 +52,7 @@ MonoBehaviour:
   itemRotationSpeed: 90
   eyePositionOffset: {x: 0, y: 0, z: 0}
   handPositionOffset: {x: 0, y: 2.16, z: 0}
-  body: {fileID: 8189213109005222648}
+  bodyList: []
   id: -1
   isAllowAction: 0
   sfxPlayer: {fileID: 4744474538541222231}
@@ -236,12 +236,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f7655e1d29ed644e968e3105b2ec15c, type: 3}
---- !u!1 &8189213109005222648 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 8f7655e1d29ed644e968e3105b2ec15c,
-    type: 3}
-  m_PrefabInstance: {fileID: 181270956029107185}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5187781972846211307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 8f7655e1d29ed644e968e3105b2ec15c,
