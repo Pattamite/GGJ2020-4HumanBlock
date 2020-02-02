@@ -7,7 +7,7 @@ public class Block : InteractableItem
     //  Mock
     [ SerializeField ] float rotateSpeed = 2;
 
-    [ SerializeField ] float correctPosition = -89.98f;
+    [ SerializeField ] public float correctPosition = -89.98f;
 
     float rotateInput;
 
