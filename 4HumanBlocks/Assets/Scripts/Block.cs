@@ -7,7 +7,7 @@ public class Block : InteractableItem
     //  Mock
     [ SerializeField ] float rotateSpeed = 2;
 
-    [ SerializeField ] float correctPosition = 0;
+    [ SerializeField ] public float correctPosition = -89.98f;
 
     float rotateInput;
 
@@ -29,15 +29,18 @@ public class Block : InteractableItem
 
     }
 
-    public bool isCorrectOrientation( float threshold = 5 )
+    public bool isCorrectOrientation( float threshold = 10 )
     {
-
-        // Debug.Log( "transform y - " + transform.rotation.eulerAngles.y );
-
         float currentTransformY =  transform.rotation.eulerAngles.y;
 
-        bool isOriented = correctPosition-threshold < currentTransformY &&
-                            currentTransformY < correctPosition+threshold;
+        float deltaAngle = Mathf.Abs(correctPosition - currentTransformY) % 360;
+
+        if (deltaAngle > 180)
+            deltaAngle = 360 - deltaAngle;
+
+        Debug.Log(gameObject + " transform y - " + transform.rotation.eulerAngles.y + " delta - " + deltaAngle);
+
+        bool isOriented = deltaAngle < threshold;
 
         return isOriented;
     }
