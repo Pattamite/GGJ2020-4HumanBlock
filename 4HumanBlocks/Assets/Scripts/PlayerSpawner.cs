@@ -49,8 +49,8 @@ public class PlayerSpawner : MonoBehaviour
         if(this.gameManager.currentGameState == GameState.WaitingForPlayer)
         {
             playerController.SetPosition( spawnPoint[playerCount].transform.position );
-            
-            playerController.id = playerCount;
+
+            playerController.setId(playerCount);
             playerControllerList.Add(playerController);
             playerCount++;
         }

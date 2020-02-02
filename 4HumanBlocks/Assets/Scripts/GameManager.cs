@@ -200,6 +200,7 @@ public class GameManager : MonoBehaviour
 
         block.transform.position = blockSubmitPointArray[playerIndex].transform.position;
         block.transform.eulerAngles = new Vector3(-89.95f, 0, 0);
+        // block.GetComponent<Rigidbody>().isKinematic = true;
     }
 
     public float GetGameTime()
