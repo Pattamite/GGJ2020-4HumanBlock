@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     private GameObject body;
     public int id = -1;
     public bool isAllowAction = false;
+    public bool isAllowStart = false;
     public SfxPlayer sfxPlayer;
 
     private PlayerInteractableRegion roi;
@@ -245,6 +246,9 @@ public class PlayerController : MonoBehaviour {
 
     void OnStartGame()
     {
+        if (!isAllowStart)
+            return;
+
         Debug.Log(this.id + " start game.");
         PlayerSpawner.StartGame();
     }
@@ -269,5 +273,6 @@ public class PlayerController : MonoBehaviour {
 
         animator = body.GetComponent<Animator>();
         this.id = id;
+        this.isAllowStart = true;
     }
 }
