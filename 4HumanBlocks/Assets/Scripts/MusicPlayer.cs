@@ -20,9 +20,13 @@ public class MusicPlayer : MonoBehaviour
     private AudioSource audioSource;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        audioSource = gameObject.GetComponent<AudioSource>();
+        // audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource = gameObject.GetComponent<AudioSource> ();
+        if (audioSource == null) {
+            audioSource = gameObject.AddComponent<AudioSource> ();
+        }
     }
 
     // Update is called once per frame

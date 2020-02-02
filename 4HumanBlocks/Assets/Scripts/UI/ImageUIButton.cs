@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -23,12 +24,11 @@ public class ImageUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         xRatio = transform.localScale[0] / Idle.rect.size[0];
         yRatio = transform.localScale[1] / Idle.rect.size[1];
 
-        // try {
-        //     audioSource = gameObject.GetComponent<AudioSource> ();
-        // } catch {
+        audioSource = gameObject.GetComponent<AudioSource> ();
+        if (audioSource == null) {
+            audioSource = gameObject.AddComponent<AudioSource> ();
+        }
 
-        // }
-        audioSource = gameObject.AddComponent<AudioSource> ();
         if (beep != null) {
             audioSource.clip = beep;
             audioSource.volume = 0.3f;
