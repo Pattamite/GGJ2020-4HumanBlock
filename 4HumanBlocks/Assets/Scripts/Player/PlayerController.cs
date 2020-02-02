@@ -70,10 +70,6 @@ public class PlayerController : MonoBehaviour {
         if ( selectedItem != null && isActive )
         {
             selectedItem.transform.Rotate(0 , rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
-
-            Vector3 itemTargetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
-            Vector3 itemNewDirection = Vector3.RotateTowards (selectedItem.transform.forward, itemTargetDirection, rotationSpeed, 0.0f);
-            selectedItem.transform.rotation = Quaternion.LookRotation (itemNewDirection.normalized);
         }
 
     }
