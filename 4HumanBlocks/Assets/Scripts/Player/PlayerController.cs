@@ -161,10 +161,11 @@ public class PlayerController : MonoBehaviour {
         // Set nearest non-occluded game object within roi region
         GameObject nearest = null;
         float minDist = 0;
+        List<GameObject> objList = new List<GameObject>();
         foreach (GameObject g in collidedItems) {
             if (!g)
             {
-                collidedItems.Remove(g);
+                objList.Add(g);
                 continue;
             }
 
@@ -176,6 +177,11 @@ public class PlayerController : MonoBehaviour {
                     if (nearest == null) minDist = dist;
                 }
             }
+        }
+
+        foreach (GameObject g in objList)
+        {
+            collidedItems.Remove(g);
         }
         selectedItem = nearest;
     }

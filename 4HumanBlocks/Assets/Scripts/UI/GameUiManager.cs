@@ -7,6 +7,7 @@ using TMPro;
 public class GameUiManager : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI timerTextEnd;
     public Image blockCommandImage;
 
     public GameObject WaitingPlayerBoard;
@@ -28,6 +29,7 @@ public class GameUiManager : MonoBehaviour
     public void UpdateTimterText(float time)
     {
         timerText.text = time.ToString("F2");
+        timerTextEnd.text = time.ToString("F2");
     }
 
     public void UpdateBlockCommandImage(Sprite sprite)
