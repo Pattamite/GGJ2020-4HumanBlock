@@ -46,33 +46,34 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update () {
-        print("Update Before:" + transform.position);
         // Absolute Position Update
         Vector3 velocity = new Vector3 (movementInput.x, 0, movementInput.y);
 
         velocity.Normalize();
 
-        velocity.y -= 20.0f;
-
-        velocity *= Time.deltaTime * movementSpeed;
-
-        // transform.Translate (velocity, Space.World);
-        characterController.Move( velocity );
-        print("Update After:" + transform.position);
-        velocity.y = 0.0f;
         // Angle Faced Update
         Vector3 targetDirection = velocity.normalized;
         Vector3 newDirection = Vector3.RotateTowards (transform.forward, targetDirection, rotationSpeed * Time.deltaTime, 0.0f);
         transform.rotation = Quaternion.LookRotation (newDirection);
 
+        //  set animation
         if ( velocity !=  Vector3.zero )
             animator.SetBool("isWalk", true );
         else
             animator.SetBool("isWalk", false);
 
+        //  Add gravity and move character
+        velocity.y -= 20.0f;
+        velocity *= Time.deltaTime * movementSpeed;
+        characterController.Move( velocity );
+       
         if ( selectedItem != null && isActive )
         {
-            selectedItem.transform.Rotate(0, rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
+            selectedItem.transform.Rotate(0 , rotateObjectInput * itemRotationSpeed * Time.deltaTime, 0);
+
+            Vector3 itemTargetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
+            Vector3 itemNewDirection = Vector3.RotateTowards (selectedItem.transform.forward, itemTargetDirection, rotationSpeed, 0.0f);
+            selectedItem.transform.rotation = Quaternion.LookRotation (itemNewDirection.normalized);
         }
 
     }
@@ -84,11 +85,15 @@ public class PlayerController : MonoBehaviour {
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
             // Aligned selectedItem face
             // (-89.98, <getY>, 0)
-            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
-            Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
+            // Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.rotation.y, 0);
+            // Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
 
-            selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
+            // selectedItem.transform.rotation = Quaternion.LookRotation (newDirection.normalized);
             selectedItem.transform.SetParent (transform);
+
+            animator.SetTrigger( "carryTrigger" );
+
+            isActive = true;
         }
     }
 
@@ -96,6 +101,8 @@ public class PlayerController : MonoBehaviour {
         // Restore selectedItem after pickup
         if (selectedItem != null) {
             OnSetPickUpItemPropertyExit ();
+            animator.SetTrigger( "dropItemTrigger" );
+            isActive = false;
         }
     }
 
@@ -104,11 +111,7 @@ public class PlayerController : MonoBehaviour {
         selectedItem.GetComponent<Rigidbody> ().useGravity = false;
         selectedItem.GetComponent<Collider> ().enabled = false;
         selectedItem.GetComponent<Rigidbody> ().isKinematic = true;
-        try {
-            previousParent = selectedItem.transform.parent.transform;
-        } catch {
-            previousParent = null;
-        }
+
     }
 
     void OnSetPickUpItemPropertyExit () {
@@ -116,8 +119,9 @@ public class PlayerController : MonoBehaviour {
         selectedItem.GetComponent<Rigidbody> ().useGravity = true;
         selectedItem.GetComponent<Collider> ().enabled = true;
         selectedItem.GetComponent<Rigidbody> ().isKinematic = false;
-        selectedItem.transform.SetParent (previousParent);
-        previousParent = null;
+        selectedItem.transform.SetParent( transform.parent );
+        // selectedItem.transform.SetParent (previousParent);
+        // previousParent = null;
     }
 
     bool isOccluded (GameObject g, Vector3 directCast) {
@@ -138,10 +142,9 @@ public class PlayerController : MonoBehaviour {
         Ray ray = new Ray (transform.position + eyePositionOffset, -1 * directCast.normalized);
         // Debug.DrawLine (ray.origin, ray.origin + ray.direction * directCast.magnitude, Color.green);
         RaycastHit hitInfo;
-        if (Physics.Raycast (ray, out hitInfo, directCast.magnitude, 9)) {
-            Debug.Log ( "" + hitInfo.collider.gameObject + " : " + g);
+        if (Physics.Raycast (ray, out hitInfo, directCast.magnitude )) {
+            Debug.Log ( "" + hitInfo.collider.gameObject + " --- " + g);
             // return (hitInfo.collider.gameObject.GetComponent<StaticItem> () != null);
-            Debug.Log( hitInfo.collider.gameObject != g );
             return (hitInfo.collider.gameObject != g);
         }
         return false;
@@ -160,10 +163,6 @@ public class PlayerController : MonoBehaviour {
                     if (nearest == null) minDist = dist;
                 }
             }
-        }
-        if (nearest != selectedItem && selectedItem != null) {
-            // OnSetPickUpItemPropertyExit ();
-            Debug.Log( "OOps");
         }
         selectedItem = nearest;
     }
@@ -198,11 +197,9 @@ public class PlayerController : MonoBehaviour {
         if (!isAllowAction)
             return;
 
-        Debug.Log(this.id + " pickup / drop item.");
+        Debug.Log(this.id + " pickup / drop item." + !isActive);
 
-        isActive = !isActive;
-
-        if (isActive)
+        if (!isActive)
         {
             // Pickup Item
             updateSelectedItem();
@@ -222,6 +219,11 @@ public class PlayerController : MonoBehaviour {
             return;
 
         this.rotateObjectInput = inputValue.Get<float>();
+
+        if ( this.rotateObjectInput != 0 )
+            animator.SetBool( "isRotatingItem", true );
+        else   
+            animator.SetBool( "isRotatingItem", false );
     }
 
     void OnStartGame()
