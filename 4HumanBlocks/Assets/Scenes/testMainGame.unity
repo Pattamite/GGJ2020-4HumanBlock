@@ -1497,6 +1497,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 9043932469741796832, guid: ce6b88f91cdcd2b4d8a142c5dbd90940,
+        type: 3}
+      propertyPath: GameWaitingMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 76a51770afa644bd986474b510057cad, type: 3}
     - target: {fileID: 9213983149043690863, guid: ce6b88f91cdcd2b4d8a142c5dbd90940,
         type: 3}
       propertyPath: commandSprite.Array.size
