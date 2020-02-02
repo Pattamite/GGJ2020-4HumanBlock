@@ -1241,6 +1241,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxPlayer: {fileID: 1598270281}
   errorThreshold: 10
+  maxWaitTime: 0
+  maxStartEmissionDelay: 1.5
+  startEmissionColor: {r: 1, g: 0.04705882, b: 0.07624797, a: 1}
+  defaultEmissionColor: {r: 1, g: 0.847, b: 0.545, a: 1}
+  correctEmissionColor: {r: 0.439, g: 1, b: 0.259, a: 1}
+  emisissionMultiplier: 2
 --- !u!136 &780646635
 CapsuleCollider:
   m_ObjectHideFlags: 0

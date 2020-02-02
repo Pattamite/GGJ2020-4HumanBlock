@@ -8,9 +8,10 @@ public class BlockDetector : MonoBehaviour {
     public static event RepairSuccessAction OnRepairsuccess;
 
     [SerializeField] float errorThreshold = 10;
-    [SerializeField] public float maxWaitTime = 1.5f;
+    [SerializeField] public float maxWaitTime = -1.0f;
     [SerializeField] public float maxStartEmissionDelay = 1.5f;
-    [SerializeField] public Color startEmissionColor = new Color (0.047f, 0.365f, 1.0f);
+    // [SerializeField] public Color startEmissionColor = new Color (0.047f, 0.365f, 1.0f);
+    [SerializeField] public Color startEmissionColor = new Color (0.439f, 1.0f, 0.259f);
     [SerializeField] public Color defaultEmissionColor = new Color (1.0f, 0.847f, 0.545f);
     [SerializeField] public Color correctEmissionColor = new Color (0.439f, 1.0f, 0.259f);
     [SerializeField] public float emisissionMultiplier = 2.0f;
@@ -69,12 +70,10 @@ public class BlockDetector : MonoBehaviour {
             if (blockInDetector.Count >= maxSplit) {
                 if (checkCombineBlock (expectedBlockName)) {
                     sfxPlayer.PlaySfxClip (SfxItem.Block_EnterCorrect);
-                    if (OnRepairsuccess != null) {
-                        isCorrectedFlag = true;
-                        waitTime = maxWaitTime;
-                        startItemEmissionDelay = maxStartEmissionDelay;
-                        mat.SetColor ("_EmissionColor", correctEmissionColor * 2.0f);
-                    }
+                    isCorrectedFlag = true;
+                    waitTime = maxWaitTime;
+                    startItemEmissionDelay = maxStartEmissionDelay;
+                    // mat.SetColor ("_EmissionColor", correctEmissionColor * 2.0f);
                 }
             }
         }
