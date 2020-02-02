@@ -82,11 +82,15 @@ public class PlayerController : MonoBehaviour {
     void OnPickUpItem () {
         // Setup selectedItem before pickup
         if (selectedItem != null) {
+            if (!selectedItem.GetComponent<Block>().isPickable)
+                return;
+
             OnSetPickUpItemPropertyEnter ();
             selectedItem.transform.position = body.transform.position + 2 * body.transform.forward + handPositionOffset;
             // Aligned selectedItem face
             // (-89.98, <getY>, 0)
-            Vector3 targetDirection = new Vector3 (-89.98f, selectedItem.transform.eulerAngles.y, 0);
+            Vector3 targetDirection = new Vector3 (selectedItem.GetComponent<Block>().defaultXRotation, 
+                                                        selectedItem.transform.eulerAngles.y, 0);
             Vector3 newDirection = Vector3.RotateTowards (selectedItem.transform.forward, targetDirection, rotationSpeed, 0.0f);
 
             selectedItem.transform.eulerAngles = targetDirection;
@@ -157,10 +161,11 @@ public class PlayerController : MonoBehaviour {
         // Set nearest non-occluded game object within roi region
         GameObject nearest = null;
         float minDist = 0;
+        List<GameObject> objList = new List<GameObject>();
         foreach (GameObject g in collidedItems) {
             if (!g)
             {
-                collidedItems.Remove(g);
+                objList.Add(g);
                 continue;
             }
 
@@ -172,6 +177,11 @@ public class PlayerController : MonoBehaviour {
                     if (nearest == null) minDist = dist;
                 }
             }
+        }
+
+        foreach (GameObject g in objList)
+        {
+            collidedItems.Remove(g);
         }
         selectedItem = nearest;
     }
