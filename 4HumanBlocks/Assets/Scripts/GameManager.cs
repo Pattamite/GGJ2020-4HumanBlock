@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
         GameObject block = this.blockDictionary[playerIndex][blockName];
 
         block.transform.position = blockSubmitPointArray[playerIndex].transform.position;
-        block.transform.eulerAngles = Vector3.zero;
+        block.transform.eulerAngles = new Vector3(-89.95f, 0, 0);
     }
 
     public float GetGameTime()

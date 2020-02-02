@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2370,6 +2370,11 @@ PrefabInstance:
         type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3136556486584112533, guid: 09ab40c53b2552944a929febabdb44cb,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 3136556486584112618, guid: 09ab40c53b2552944a929febabdb44cb,
         type: 3}
