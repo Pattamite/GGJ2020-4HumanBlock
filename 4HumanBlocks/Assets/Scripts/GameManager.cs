@@ -98,6 +98,9 @@ public class GameManager : MonoBehaviour {
     {
         for(int i = 0; i < blockSetNameArray.Length; i++)
         {
+            print(i);
+            print(blockSetNameArray[i]);
+            print(commandSprite[i]);
             spriteDict.Add(blockSetNameArray[i], commandSprite[i]);
         }
     }
